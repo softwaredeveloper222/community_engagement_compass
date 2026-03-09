@@ -1,0 +1,147 @@
+ 
+ {% extends "allauth/layouts/entrance.html" %}
+ {% load i18n static %}
+ 
+ {% block head_title %}{% trans "Sign In" %}{% endblock %}
+ 
+ {% block css %}
+   {{ block.super }}
+   <link rel="stylesheet" href="{% static 'css/healthjustice.css' %}">
+   <style>
+   .ka-auth-logo {
+     height: 72px;
+      width: auto;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25));
+    }
+
+     .ka-auth-card .form-label {
+       font-weight: 600;
+       color: var(--secondary-color);
+     }
+ 
+     .ka-auth-card input[type="text"],
+     .ka-auth-card input[type="email"],
+     .ka-auth-card input[type="password"] {
+       border-radius: 10px;
+       padding: 0.75rem 1rem;
+       border: 1px solid var(--border-color);
+       width: 100%;
+     }
+ 
+     .ka-auth-card input[type="text"]:focus,
+     .ka-auth-card input[type="email"]:focus,
+     .ka-auth-card input[type="password"]:focus {
+       box-shadow: 0 0 0 .25rem rgba(97, 67, 133, .15);
+       border-color: var(--primary-color);
+       outline: none;
+     }
+ 
+     .ka-auth-card .btn-primary-ka {
+       background: var(--gradient-primary);
+       border: none;
+       border-radius: 10px;
+       padding: .75rem 1rem;
+     }
+ 
+     .ka-auth-card .btn-primary-ka:hover {
+       filter: brightness(0.95);
+     }
+ 
+     .ka-auth-card .card {
+       border-radius: 14px;
+     }
+   </style>
+ {% endblock %}
+ 
+ {% block content %}
+  <div class="text-center mb-4">
+   <img src="{% static 'images/healthjustice-logo.webp' %}" alt="Health Justice" class="ka-auth-logo">
+    <div class="text-muted mb-1" style="font-size: 0.95rem;">
+      <i class="fas fa-right-to-bracket me-2"></i>{% trans "Welcome to" %}
+    </div>
+    <h1 class="h3 fw-bold" style="color: var(--primary-color)">{% trans "Community Engagement Compass" %}</h1>
+  </div>
+ 
+   <div class="card shadow-sm border-0 ka-auth-card">
+     <div class="card-body p-4 p-md-5">
+       <form method="post" action="{% url 'account_login' %}">
+         {% csrf_token %}
+ 
+         {% if form.non_field_errors %}
+           <div class="alert alert-danger" role="alert">
+             {{ form.non_field_errors }}
+           </div>
+         {% endif %}
+ 
+         <div class="mb-3">
+           <label class="form-label" for="id_login">{% trans "Email" %}</label>
+           <input type="email" name="login" id="id_login" class="form-control" required>
+           {% if form.login.errors %}
+             <div class="text-danger small">{{ form.login.errors|striptags }}</div>
+           {% endif %}
+         </div>
+ 
+         <div class="mb-3">
+           <div class="d-flex justify-content-between align-items-center">
+             <label class="form-label" for="id_password">{% trans "Password" %}</label>
+             <a class="small" href="{% url 'account_reset_password' %}">{% trans "Forgot password?" %}</a>
+           </div>
+           <input type="password" name="password" id="id_password" class="form-control" required>
+           {% if form.password.errors %}
+             <div class="text-danger small">{{ form.password.errors|striptags }}</div>
+           {% endif %}
+         </div>
+ 
+         <div class="form-check mb-3">
+           {{ form.remember }}
+           <label class="form-check-label" for="id_remember">{% trans "Remember me" %}</label>
+         </div>
+ 
+         <button type="submit" class="btn w-100 text-white btn-primary-ka">
+           <i class="fas fa-arrow-right-to-bracket me-2"></i>{% trans "Sign In" %}
+         </button>
+       </form>
+ 
+       {% if ACCOUNT_ALLOW_REGISTRATION %}
+         <p class="text-center mt-3 mb-0 text-muted">
+           {% trans "Don't have an account?" %}
+           <a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+         </p>
+       {% endif %}
+     </div>
+   </div>
+ 
+ <!-- Email verification modal -->
+ <div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered">
+     <div class="modal-content">
+       <div class="modal-header" style="background: var(--gradient-primary); color: #fff;">
+         <h5 class="modal-title" id="verificationModalLabel"><i class="fas fa-envelope-circle-check me-2"></i>{% trans "Verify your email" %}</h5>
+         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+       </div>
+       <div class="modal-body">
+         <p class="mb-2">{% trans "We sent a confirmation link to your email. Please confirm to continue." %}</p>
+         <p class="text-muted small mb-0">{% trans "Didn’t receive it? Check spam or request a new link from the signup page." %}</p>
+       </div>
+       <div class="modal-footer">
+         <a href="{% url 'account_signup' %}" class="btn btn-outline-secondary"><i class="fas fa-repeat me-2"></i>{% trans "Resend link" %}</a>
+         <button type="button" class="btn text-white" style="background: var(--gradient-primary);" data-bs-dismiss="modal">{% trans "Got it" %}</button>
+       </div>
+     </div>
+   </div>
+ </div>
+ 
+ <script>
+   document.addEventListener('DOMContentLoaded', function(){
+     try {
+       const params = new URLSearchParams(window.location.search);
+       if (params.get('verification') === 'sent') {
+         var modal = new bootstrap.Modal(document.getElementById('verificationModal'));
+         modal.show();
+       }
+     } catch (e) { /* noop */ }
+   });
+ </script>
+ {% endblock %}
+ 

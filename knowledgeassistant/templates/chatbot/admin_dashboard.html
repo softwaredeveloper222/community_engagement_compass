@@ -1,0 +1,812 @@
+{% extends 'chatbot/base.html' %}
+
+{% block title %}Knowledge Base - Dashboard{% endblock %}
+
+
+{% block extra_css %}
+{% load static %}
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    /* CSS Custom Properties */
+    :root {
+        /* Colors - client palette */
+        --primary: #2C2E65;
+        --primary-light: #3a3d84;
+        --primary-dark: #232554;
+        --secondary: #905E7B;
+        --success: #2C2E65;
+        --warning: #905E7B;
+        --danger: #ef4444;
+        
+        /* Backgrounds */
+        --bg-light: #D7D8E2;
+        --bg-white: #ffffff;
+        --bg-dark: #1e293b;
+        
+        /* Borders & Shadows */
+        --border: #D7D8E2;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+        
+        /* Spacing */
+        --spacing-xs: 0.25rem;
+        --spacing-sm: 0.5rem;
+        --spacing-md: 1rem;
+        --spacing-lg: 1.5rem;
+        --spacing-xl: 2rem;
+        
+        /* Typography */
+        --font-sm: 0.875rem;
+        --font-base: 1rem;
+        --font-lg: 1.125rem;
+        --font-xl: 1.25rem;
+        --font-2xl: 1.5rem;
+        --font-3xl: 1.875rem;
+        
+        /* Transitions */
+        --transition: all 0.2s ease;
+        
+        /* Gradients */
+        --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-light));
+    }
+
+    /* Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: var(--bg-light);
+        color: var(--bg-dark);
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* Navigation */
+    .navbar {
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        padding: 1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .navbar-brand {
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: white !important;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Ensure brand logo is visible on dark navbar */
+    .navbar-brand img {
+        height: 44px;
+        width: auto;
+        filter: brightness(0) invert(1) drop-shadow(0 0 2px rgba(0,0,0,0.6));
+        margin-right: 0.5rem;
+    }
+
+    .admin-btn {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        backdrop-filter: blur(10px);
+    }
+
+    .admin-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .admin-btn i {
+        font-size: 0.9em;
+    }
+
+    /* Main Dashboard */
+    .dashboard-main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: var(--spacing-xl) var(--spacing-lg);
+        padding-top: calc(72px + var(--spacing-xl)); /* Add space for fixed navbar */
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .stat-card {
+        background: var(--bg-white);
+        border-radius: 12px;
+        padding: var(--spacing-lg);
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border);
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient-primary);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .stat-content {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        background: var(--gradient-primary);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: var(--font-xl);
+    }
+
+    .stat-details h3 {
+        font-size: var(--font-3xl);
+        font-weight: 700;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .stat-details p {
+        color: var(--secondary);
+        font-size: var(--font-sm);
+        font-weight: 500;
+    }
+
+    /* Section Cards */
+    .section-card {
+        background: var(--bg-white);
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .section-header {
+        background: var(--gradient-primary);
+        color: white;
+        padding: var(--spacing-lg);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+    }
+
+    .section-icon {
+        font-size: var(--font-xl);
+    }
+
+    .section-title {
+        font-size: var(--font-xl);
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .section-content {
+        padding: var(--spacing-lg);
+    }
+
+    /* Upload Section */
+    .upload-section {
+        background: var(--bg-white);
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .upload-form {
+        padding: var(--spacing-lg);
+    }
+
+    .upload-form .row {
+        display: flex;
+        gap: var(--spacing-md);
+        align-items: end;
+    }
+
+    .upload-form .col-md-9 {
+        flex: 1;
+    }
+
+    .upload-form .col-md-3 {
+        flex-shrink: 0;
+    }
+
+    .upload-area input[type="file"] {
+        width: 100%;
+        padding: var(--spacing-md);
+        border: 2px dashed var(--border);
+        border-radius: 8px;
+        background: var(--bg-light);
+        transition: var(--transition);
+    }
+
+    .upload-area input[type="file"]:hover {
+        border-color: var(--primary);
+        background: rgba(44, 46, 101, 0.05);
+    }
+
+    .upload-btn {
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+        padding: var(--spacing-md) var(--spacing-lg);
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        white-space: nowrap;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--spacing-sm);
+    }
+
+    .upload-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+
+    /* Documents Section */
+    .documents-section {
+        background: var(--bg-white);
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border);
+        overflow: hidden;
+    }
+
+    .table-header {
+        padding: var(--spacing-lg);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .search-container {
+        position: relative;
+        max-width: 400px;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: var(--spacing-md);
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--secondary);
+    }
+
+    .search-input {
+        width: 100%;
+        padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) 2.5rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--bg-white);
+        transition: var(--transition);
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(44, 46, 101, 0.12);
+    }
+
+    /* Table */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--bg-white);
+    }
+
+    .data-table th {
+        background: var(--bg-light);
+        padding: var(--spacing-md);
+        text-align: left;
+        font-weight: 600;
+        color: var(--bg-dark);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .data-table td {
+        padding: var(--spacing-md);
+        border-bottom: 1px solid var(--border);
+        vertical-align: middle;
+    }
+
+    .data-table tr:hover {
+        background: var(--bg-light);
+    }
+
+    .document-info {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+    }
+
+    .doc-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--gradient-primary);
+        color: white;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .doc-details h4 {
+        font-size: var(--font-base);
+        font-weight: 600;
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .doc-details p {
+        color: var(--secondary);
+        font-size: var(--font-sm);
+        margin: 0;
+    }
+
+    /* Status Badges */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        padding: var(--spacing-xs) var(--spacing-sm);
+        border-radius: 20px;
+        font-size: var(--font-sm);
+        font-weight: 500;
+    }
+
+    .status-success {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success);
+    }
+
+    .status-warning {
+        background: rgba(245, 158, 11, 0.1);
+        color: var(--warning);
+    }
+
+    .status-error {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
+    }
+
+    /* Action Buttons */
+    .action-btns {
+        display: flex;
+        gap: var(--spacing-xs);
+        justify-content: flex-end;
+    }
+
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        background: var(--bg-white);
+        color: var(--secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+        text-decoration: none;
+    }
+
+    .action-btn:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .action-btn.danger:hover {
+        background: var(--danger);
+        border-color: var(--danger);
+        color: white;
+    }
+
+    .d-inline {
+        display: inline-block;
+    }
+
+    .text-end {
+        text-align: right;
+    }
+
+    .w-100 {
+        width: 100%;
+    }
+
+    .me-2 {
+        margin-right: var(--spacing-sm);
+    }
+
+    .g-3 {
+        gap: var(--spacing-md);
+    }
+
+    .position-relative {
+        position: relative;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .brand-text {
+            display: none;
+        }
+        
+        .dashboard-main {
+            padding: var(--spacing-lg) var(--spacing-md);
+        }
+        
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .upload-form .row {
+            flex-direction: column;
+        }
+        
+        .stat-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .action-btns {
+            flex-wrap: wrap;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .data-table {
+            font-size: var(--font-sm);
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: var(--spacing-sm);
+        }
+
+        .doc-details h4 {
+            font-size: var(--font-sm);
+        }
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--bg-light);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--gradient-primary);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-dark);
+    }
+</style>
+<link rel="stylesheet" href="{% static 'css/healthjustice.css' %}">
+{% endblock %}
+
+{% block content %}
+    <nav class="navbar fixed-top" style="z-index: 1030;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="{% static 'images/healthjustice-logo.webp' %}" alt="Health Justice" height="44" class="me-2">
+                Community Engagement Compass
+            </a>
+            <div class="d-flex align-items-center">
+                {% if request.user.is_authenticated %}
+                <span class="text-white me-3 d-none d-md-inline" style="opacity: .9;">
+                    Welcome, {{ request.user.name|default:request.user.username|default:request.user.email }}!
+                </span>
+                {% endif %}
+                <a href="{% url 'chatbot:chat_home' %}" class="btn admin-btn me-3">
+                    <i class="fas fa-comments me-2"></i>
+                    <span class="d-none d-md-inline">Chat</span>
+                </a>
+                <a href="#" class="btn admin-btn me-3" data-bs-toggle="modal" data-bs-target="#aboutModal" role="button">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <span class="d-none d-md-inline">About</span>
+                </a>
+                <a href="#" class="btn admin-btn me-3" data-bs-toggle="modal" data-bs-target="#howItWorksModal" role="button">
+                    <i class="fas fa-circle-question me-2"></i>
+                    <span class="d-none d-md-inline">How it works</span>
+                </a>
+                
+                <a href="{% url 'chatbot:feedback' %}" class="btn admin-btn me-3">
+                    <i class="fas fa-message me-2"></i>
+                    <span class="d-none d-md-inline">Feedback</span>
+                </a>
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'users:detail' request.user.pk %}" class="btn admin-btn me-2" title="Profile" aria-label="Profile" style="padding:.35rem .5rem;">
+                    <i class="fas fa-user-circle"></i>
+                </a>
+                <a href="{% url 'account_logout' %}" class="btn admin-btn" title="Logout">
+                    <i class="fas fa-right-from-bracket"></i>
+                    <span class="d-none d-md-inline ms-2">Logout</span>
+                </a>
+                {% else %}
+                <a href="{% url 'account_login' %}" class="btn admin-btn">
+                    <i class="fas fa-right-to-bracket me-2"></i>
+                    <span class="d-none d-md-inline">Login</span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+<div class="dashboard-main">
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-content">
+                <div class="stat-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="stat-details">
+                    <h3>{{ total_docs }}</h3>
+                    <p>Total Documents</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-content">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-details">
+                    <h3>{{ processed_docs }}</h3>
+                    <p>Processed</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-content">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-details">
+                    <h3>{{ pending_docs }}</h3>
+                    <p>Pending</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-content">
+                <div class="stat-icon">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="stat-details">
+                    <h3>{{ total_chunks }}</h3>
+                    <p>Knowledge Chunks</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Section -->
+    <div class="upload-section">
+        <div class="section-header">
+            <i class="section-icon fas fa-cloud-upload-alt"></i>
+            <h2 class="section-title">Upload Documents</h2>
+        </div>
+
+        <form method="post" action="{% url 'chatbot:upload_pdf' %}" enctype="multipart/form-data" class="upload-form">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-9">
+                    <div class="upload-area">
+                        
+                        <input type="file" class="form-control bg-transparent text-dark"
+                               name="pdf_files" multiple accept=".pdf" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="upload-btn w-100">
+                        <i class="fas fa-upload me-2"></i>Process Files
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Documents Section -->
+    <div class="documents-section">
+        <div class="table-header">
+            <form method="get" class="position-relative">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" name="search"
+                           placeholder="Search documents..." value="{{ search_query }}">
+                </div>
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Document</th>
+                        <th>Owner</th>
+                        <th>Uploaded</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for document in documents %}
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <div class="doc-icon">
+                                    <i class="fas fa-file-pdf"></i>
+                                </div>
+                                <div class="doc-details">
+                                    <h4>{{ document.title }}</h4>
+                                    <p>{{ document.file.name|truncatechars:40 }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ document.uploaded_by.name|default:document.uploaded_by.email }}</td>
+                        <td>{{ document.uploaded_at|date:"M d, Y" }}</td>
+                        <td>
+                            {% if document.processed %}
+                            <span class="status-badge status-success">
+                                <i class="fas fa-check"></i>
+                                Processed
+                            </span>
+                            {% elif document.processing_error %}
+                            <span class="status-badge status-error">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Error
+                            </span>
+                            {% else %}
+                            <span class="status-badge status-warning">
+                                <i class="fas fa-clock"></i>
+                                Pending
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="action-btns">
+                                <a href="{% url 'chatbot:document_details' document.id %}"
+                                   class="action-btn" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <form method="post" action="{% url 'chatbot:reprocess_document' document.id %}"
+                                      class="d-inline" onsubmit="return confirm('Reprocess this document?')">
+                                    {% csrf_token %}
+                                    <button type="submit" class="action-btn" title="Reprocess">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                </form>
+                                <form method="post" action="{% url 'chatbot:delete_document' document.id %}"
+                                      class="d-inline" onsubmit="return confirm('Delete this document?')">
+                                    {% csrf_token %}
+                                    <button type="submit" class="action-btn danger" title="Delete">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 2rem; color: var(--secondary);">
+                            <i class="fas fa-folder-open" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                            <p>No documents found. Upload your first document to get started!</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Survey Responses Section -->
+    <div class="section-card" style="margin-top: var(--spacing-xl);">
+        <div class="section-header">
+            <i class="section-icon fas fa-clipboard-list"></i>
+            <h2 class="section-title">Recent Survey Responses</h2>
+        </div>
+        <div class="section-content">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Ease</th>
+                            <th>Relevance</th>
+                            <th>Trust</th>
+                            <th>Citations</th>
+                            <th>Likelihood</th>
+                            <th>Additional Sources</th>
+                            <th>Open Feedback</th>
+                            <th>When</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sr in recent_survey_responses %}
+                        <tr>
+                            <td>
+                                {% if sr.user %}
+                                    {{ sr.user.name|default:sr.user.email }}
+                                {% else %}
+                                    Anonymous
+                                {% endif %}
+                            </td>
+                            <td>{{ sr.get_ease_of_use_display }}</td>
+                            <td>{{ sr.get_relevance_display }}</td>
+                            <td>{{ sr.get_trust_display }}</td>
+                            <td>{{ sr.get_citations_helpfulness_display }}</td>
+                            <td>{{ sr.get_likelihood_of_use_display }}</td>
+                            <td>{{ sr.additional_sources|default:'-'|truncatechars:120 }}</td>
+                            <td>{{ sr.open_feedback|default:'-'|truncatechars:120 }}</td>
+                            <td>{{ sr.created_at|date:"M d, Y H:i" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="9" style="text-align:center; padding:1rem; color: var(--secondary);">No survey responses yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

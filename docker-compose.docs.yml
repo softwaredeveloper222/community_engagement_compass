@@ -1,0 +1,16 @@
+services:
+  docs:
+    image: knowledgeassistant_local_docs
+    container_name: knowledgeassistant_local_docs
+    build:
+      context: .
+      dockerfile: ./compose/local/docs/Dockerfile
+    env_file:
+      - ./.envs/.local/.django
+    volumes:
+      - ./docs:/docs:z
+      - ./config:/app/config:z
+      - ./knowledgeassistant:/app/knowledgeassistant:z
+    ports:
+      - '9000:9000'
+    command: /start-docs

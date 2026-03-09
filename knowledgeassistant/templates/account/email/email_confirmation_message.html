@@ -1,0 +1,49 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% trans "Confirm your email" %}</title>
+  <style>
+    :root { --primary-start:#2C2E65; --primary-end:#3a3d84; --border:#e5e7eb; --muted:#6b7280; }
+    body { background:#f6f7fb; margin:0; font-family: Arial, Helvetica, sans-serif; color:#111827; }
+    .container { max-width:600px; margin:0 auto; padding:24px; }
+    .card { background:#ffffff; border-radius:14px; box-shadow:0 4px 18px rgba(17,24,39,0.06); overflow:hidden; border:1px solid var(--border); }
+    .header { padding:28px; text-align:center; background:linear-gradient(135deg,var(--primary-start),var(--primary-end)); }
+    .logo { height:52px; display:block; margin:0 auto; filter: brightness(0) invert(1); }
+    .content { padding:26px 26px 10px; }
+    .title { font-size:22px; font-weight:700; margin:0 0 8px; color:#2C2E65; }
+    .subtitle { font-size:14px; color:#4b5563; margin:0 0 16px; }
+    .text { line-height:1.7; margin:0 0 16px; color:#374151; }
+    .cta { text-align:center; margin:24px 0; }
+    .btn { display:inline-block; background:linear-gradient(135deg,var(--primary-start),var(--primary-end)); color:#ffffff !important; text-decoration:none; padding:12px 18px; border-radius:10px; font-weight:700; }
+    .divider { height:1px; background:var(--border); margin:18px 0; }
+    .fallback { font-size:12px; color:var(--muted); word-break:break-all; background:#f9fafb; border:1px solid var(--border); border-radius:8px; padding:10px; }
+    .footer { font-size:12px; color:var(--muted); padding:16px 24px 24px; text-align:center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <img class="logo" src="{{ protocol }}://{{ domain }}{% static 'images/healthjustice-logo.webp' %}" alt="Community Engagement Compass">
+      </div>
+      <div class="content">
+        <p class="title">{% trans "Confirm your email" %}</p>
+        <p class="subtitle">{% blocktrans %}You're almost there. Verify your email to finish setting up your account.{% endblocktrans %}</p>
+        <div class="cta">
+          <a class="btn" href="{{ activate_url }}" target="_blank">{% trans "Confirm email" %}</a>
+        </div>
+        <div class="divider"></div>
+        <p class="text">{% blocktrans %}If the button doesn't work, copy and paste this link into your browser:{% endblocktrans %}</p>
+        <div class="fallback">{{ activate_url }}</div>
+        <p class="text">{% blocktrans %}If you didn’t create an account, you can safely ignore this message.{% endblocktrans %}</p>
+      </div>
+      <div class="footer">
+        <p>&copy; {{ current_year|default:2025 }} {{ current_site.name }} — {% trans "All rights reserved" %}</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

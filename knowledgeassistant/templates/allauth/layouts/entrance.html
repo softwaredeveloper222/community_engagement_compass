@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block bodyclass %}bg-light{% endblock bodyclass %}
+
+{% block css %}
+{{ block.super }}
+<style>
+  /* Unified input look for auth pages */
+  .ka-auth-card .form-label { font-weight: 600; color: var(--secondary-color, #64748b); }
+  .ka-auth-card input[type="text"],
+  .ka-auth-card input[type="email"],
+  .ka-auth-card input[type="password"],
+  .ka-auth-card textarea,
+  .ka-input {
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color, #e2e8f0);
+    background-color: #fff;
+  }
+  .ka-auth-card input[type="text"]:focus,
+  .ka-auth-card input[type="email"]:focus,
+  .ka-auth-card input[type="password"]:focus,
+  .ka-auth-card textarea:focus,
+  .ka-input:focus {
+    outline: none; border-color: var(--primary-color, #516395);
+    box-shadow: 0 0 0 .25rem rgba(81,99,149,.15);
+  }
+  .ka-checkbox { width: 1.1rem; height: 1.1rem; }
+  .btn-primary-ka { background: var(--gradient-primary, linear-gradient(135deg, #614385, #516395)); border: none; border-radius: 10px; padding: .75rem 1rem; color: #fff; }
+  .btn-primary-ka:hover { filter: brightness(0.95); }
+  .ka-auth-card .card { border-radius: 14px; }
+  /* Autofill background fix */
+  input.ka-input:-webkit-autofill,
+  input.ka-input:-webkit-autofill:hover,
+  input.ka-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+    box-shadow: inset 0 0 0 1000px #fff;
+    -webkit-text-fill-color: #111827;
+  }
+  /* Firefox autofill */
+  input.ka-input:-moz-ui-valid,
+  input.ka-input:-moz-ui-invalid { background-color: #fff !important; }
+</style>
+{% endblock css %}
+{% block title %}
+  {% block head_title %}
+    {% trans "Sign In" %}
+  {% endblock head_title %}
+{% endblock title %}
+{% block body %}
+  <div class="d-flex justify-content-center align-items-center min-vh-100 py-4">
+    <div class="col-11 col-sm-8 col-md-6 col-lg-4 py-4 my-4 px-2 px-sm-3 px-md-4">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+            {{ message }}
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+      {% block content %}
+      {% endblock content %}
+      {% block extra_body %}
+      {% endblock extra_body %}
+    </div>
+  </div>
+{% endblock body %}

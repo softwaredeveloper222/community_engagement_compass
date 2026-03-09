@@ -1,0 +1,35 @@
+{% extends "chatbot/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block extra_css %}
+<style>
+  .edit-wrap { max-width: 720px; margin: 2rem auto; padding-top: 2em; }
+  .card { background:#fff; border:1px solid var(--border-color); border-radius:14px; box-shadow:0 2px 10px rgba(0,0,0,.04); }
+  .card-header { padding:1rem 1.25rem; border-bottom:1px solid var(--border-color); background:linear-gradient(135deg, rgba(44,46,101,.06), rgba(58,61,132,.06)); color:var(--primary-color); font-weight:600; }
+  .card-body { padding:1.25rem; }
+  .actions { display:flex; gap:.5rem; }
+  .ka-btn { background: var(--primary-color); color:#fff; border:none; border-radius:10px; padding:.5rem .9rem; text-decoration:none; display:inline-flex; align-items:center; gap:.5rem; }
+  .ka-btn.secondary { background:#f3f4f6; color:#111827; border:1px solid #e5e7eb; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="edit-wrap">
+  <div class="card">
+    <div class="card-header"><i class="fas fa-pen me-2"></i>Edit Profile</div>
+    <div class="card-body">
+      <form method="post" action="{% url 'users:update' %}">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="d-flex justify-content-between mt-3">
+          <a href="{% url 'users:detail' request.user.pk %}" class="ka-btn secondary"><i class="fas fa-arrow-left"></i><span>Back</span></a>
+          <button type="submit" class="ka-btn"><i class="fas fa-save"></i><span>Save changes</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

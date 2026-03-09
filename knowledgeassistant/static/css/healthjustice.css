@@ -1,0 +1,108 @@
+:root {
+  /* Client palette */
+  --hj-primary: #2C2E65;           /* blue */
+  --hj-primary-light: #3a3d84;     /* lighter blue */
+  --hj-primary-dark: #232554;      /* darker blue */
+  --hj-accent: #555C38;            /* green */
+  --hj-accent-strong: #48502f;     /* darker green for hovers */
+  --hj-secondary: #905E7B;         /* additional accent */
+  --hj-success: #2C2E65;           /* align success tint to brand */
+  --hj-danger: #b91c1c;
+  --hj-bg-light: #D7D8E2;          /* subtle light background */
+  --hj-border: #D7D8E2;
+
+  /* Useful tints of primary (computed approximations) */
+  --hj-tint-02: rgba(44, 46, 101, 0.02);
+  --hj-tint-05: rgba(44, 46, 101, 0.05);
+  --hj-tint-10: rgba(44, 46, 101, 0.10);
+}
+
+/* Map project-wide variables to Health Justice palette */
+:root {
+  --primary-gradient-start: var(--hj-primary);
+  --primary-gradient-end: var(--hj-primary-light);
+  --primary-color: var(--hj-primary);
+  --primary-light: var(--hj-primary-light);
+  --primary-dark: var(--hj-primary-dark);
+  --secondary-color: var(--hj-secondary);
+  --success-color: var(--hj-success);
+  --danger-color: var(--hj-danger);
+  --warning-color: var(--hj-secondary);
+  --dark-bg: #0f172a;
+  --light-bg: var(--hj-bg-light);
+  --border-color: var(--hj-border);
+  --chat-bubble-user: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+  --chat-bubble-assistant: #ffffff;
+  --source-bg: rgba(35, 43, 102, 0.05);
+}
+
+/* Map dashboard variable set */
+:root {
+  --primary: var(--hj-primary);
+  --primary-light: var(--hj-primary-light);
+  --primary-dark: var(--hj-primary-dark);
+  --secondary: var(--hj-secondary);
+  --success: var(--hj-success);
+  --warning: var(--hj-secondary);
+  --danger: var(--hj-danger);
+  --bg-light: var(--hj-bg-light);
+  --bg-white: #ffffff;
+  --bg-dark: #0f172a;
+  --border: var(--hj-border);
+  --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-light));
+}
+
+/* Olive accent utility for elements that should reflect the green banner */
+.hj-olive-bg { background-color: var(--hj-accent) !important; }
+.hj-olive-text { color: var(--hj-accent) !important; }
+.hj-olive-border { border-color: var(--hj-accent) !important; }
+
+/* Chat overrides to blend navy + olive */
+.navbar { background: linear-gradient(135deg, var(--hj-primary), var(--hj-primary-light)) !important; }
+.new-chat-btn { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
+.new-chat-btn:hover { background: linear-gradient(135deg, var(--hj-accent-strong), var(--hj-primary)) !important; }
+.chat-header { background: linear-gradient(135deg, rgba(44,46,101,0.06), rgba(85,92,56,0.10)) !important; }
+.chat-history-item:hover { background: rgba(85, 92, 56, 0.10) !important; }
+.chat-history-item.active { background: rgba(44, 46, 101, 0.10) !important; border-left-color: var(--hj-accent) !important; }
+.message-sources { border-left-color: var(--hj-accent) !important; background: rgba(44,46,101,0.06) !important; }
+.source-title { color: var(--hj-primary) !important; }
+.source-similarity { background: rgba(44, 46, 101, 0.10) !important; color: var(--hj-success) !important; }
+.send-button { background: var(--hj-primary) !important; }
+.send-button:hover:not(:disabled) { background: var(--hj-accent-strong) !important; }
+.typing-indicator { border-color: var(--hj-border) !important; }
+.streaming-cursor { background-color: var(--hj-accent) !important; }
+
+/* Dashboard accents */
+.dashboard-nav { background: var(--gradient-primary) !important; }
+.stat-card::before { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
+.stat-icon { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
+.section-header { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
+.upload-btn { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
+.action-btn:hover { background: var(--hj-primary) !important; border-color: var(--hj-primary) !important; }
+.action-btn.danger:hover { background: var(--hj-danger) !important; border-color: var(--hj-danger) !important; }
+
+/* Bubbles and avatars use both tones for a cohesive look */
+.avatar { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
+.message.assistant .avatar { background: linear-gradient(135deg, var(--hj-accent), var(--hj-primary)) !important; }
+.message.user .message-content { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; color: #ffffff !important; }
+.message.assistant .message-content { border-color: rgba(113,122,75,0.35) !important; }
+
+/* Inputs and focus states fuse navy + olive */
+.search-input:focus { border-color: var(--hj-accent) !important; box-shadow: 0 2px 6px rgba(113,122,75,0.18) !important; }
+.chat-input { border-color: var(--hj-border) !important; }
+.chat-input:focus { border-color: var(--hj-primary) !important; box-shadow: 0 4px 10px rgba(35,43,102,0.12), 0 0 0 3px rgba(113,122,75,0.10) !important; }
+.toggle-slider { background-color: rgba(35,43,102,0.25) !important; }
+input:checked + .toggle-slider { background-image: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
+
+/* Scrollbar uses both tones */
+::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
+::-webkit-scrollbar-thumb:hover { background: var(--hj-accent-strong) !important; }
+
+/* Badges in source list and elsewhere */
+.badge.bg-secondary { background-color: var(--hj-accent) !important; color: #fff !important; }
+
+/* Tables and headers lightly tinted */
+.data-table th { background: rgba(35,43,102,0.05) !important; }
+.data-table tr:hover { background: rgba(113,122,75,0.06) !important; }
+
+

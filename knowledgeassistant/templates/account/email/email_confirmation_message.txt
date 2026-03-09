@@ -1,0 +1,9 @@
+{% load i18n %}
+{% blocktrans %}You're almost set! Confirm your email for {{ current_site.name }} by opening this link:{% endblocktrans %}
+
+{{ activate_url }}
+
+{% blocktrans %}If you didn’t create an account, you can safely ignore this message.{% endblocktrans %}
+
+{% trans "Thanks," %}
+{{ current_site.name }}

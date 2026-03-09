@@ -1,0 +1,162 @@
+{% extends "chatbot/base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Community Engagement Compass Feedback Survey" %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/healthjustice.css' %}">
+<style>
+  .feedback-container {
+    max-width: 720px;
+    margin: 7rem auto 2rem;
+  }
+
+  .feedback-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+  }
+
+  .feedback-card .header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(135deg, rgba(97, 67, 133, 0.05), rgba(81, 99, 149, 0.05));
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+  }
+
+  .feedback-card .header h5 {
+    margin: 0;
+    color: var(--primary-color);
+    font-weight: 600;
+  }
+
+  .feedback-card .body {
+    padding: 1.5rem;
+  }
+
+  .feedback-card label {
+    font-weight: 600;
+    color: var(--secondary-color);
+  }
+
+  .feedback-card input[type="text"],
+  .feedback-card input[type="email"],
+  .feedback-card textarea {
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    width: 100%;
+  }
+
+  .feedback-card input:focus,
+  .feedback-card textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 .25rem rgba(81, 99, 149, .15);
+  }
+
+  .btn-primary-ka {
+    background: var(--gradient-primary);
+    border: none;
+    border-radius: 10px;
+    padding: .75rem 1rem;
+    color: #fff;
+  }
+
+  .btn-primary-ka:hover {
+    filter: brightness(0.95);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="feedback-container">
+  <div class="feedback-card">
+    <div class="header">
+      <h5>{% trans "Community Engagement Compass Feedback Survey – We want to hear from you!" %}</h5>
+    </div>
+    <div class="body">
+      <p class="mb-3">
+        {% trans "We are testing this new resource, Community Engagement Compass, designed to support healthcare and public health professionals and organizations in applying trusted community engagement frameworks in their work." %}
+      </p>
+      <p class="mb-4">
+        {% trans "Your feedback will help us improve this proof-of-concept so it can better meet the needs of people and organizations working to advance health equity through community partnerships. The survey should take less than 2 minutes to complete. Thank you in advance for your time." %}
+      </p>
+
+      <form method="post" action="{% url 'chatbot:feedback' %}">
+        {% csrf_token %}
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <div class="mb-4">
+          <label class="form-label"><strong>{% trans "1. Ease of Use" %}</strong> <span class="text-muted">– {% trans "How easy was it to interact with the Health Engagement Navigator?" %} <span class="text-danger">*</span></span></label>
+          {{ form.ease_of_use }}
+          {% if form.ease_of_use.errors %}
+            <div class="text-danger small">{{ form.ease_of_use.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label"><strong>{% trans "2. Relevance of Responses" %}</strong> <span class="text-muted">– {% trans "Did the information provided feel relevant to your work?" %} <span class="text-danger">*</span></span></label>
+          {{ form.relevance }}
+          {% if form.relevance.errors %}
+            <div class="text-danger small">{{ form.relevance.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label"><strong>{% trans "3. Trust in Responses" %}</strong> <span class="text-muted">– {% trans "How confident did you feel in the accuracy of the answers?" %} <span class="text-danger">*</span></span></label>
+          {{ form.trust }}
+          {% if form.trust.errors %}
+            <div class="text-danger small">{{ form.trust.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label"><strong>{% trans "4. Usefulness of Citations & Explanations" %}</strong> <span class="text-muted">– {% trans "How helpful were the citations and ‘how it got the answer’ notes?" %} <span class="text-danger">*</span></span></label>
+          {{ form.citations_helpfulness }}
+          {% if form.citations_helpfulness.errors %}
+            <div class="text-danger small">{{ form.citations_helpfulness.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label"><strong>{% trans "5. Likelihood of Use" %}</strong> <span class="text-muted">– {% trans "If developed further, how likely are you to use this resource in your professional work?" %} <span class="text-danger">*</span></span></label>
+          {{ form.likelihood_of_use }}
+          {% if form.likelihood_of_use.errors %}
+            <div class="text-danger small">{{ form.likelihood_of_use.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-4">
+          <label for="id_additional_sources" class="form-label"><strong>{% trans "6. Additional Sources" %}</strong> <span class="text-muted">– {% trans "What other community engagement resources or frameworks should we add to the Community Engagement Compass’s database?" %} <span class="text-muted">({% trans "Optional" %})</span></span></label>
+          {{ form.additional_sources }}
+          {% if form.additional_sources.errors %}
+            <div class="text-danger small">{{ form.additional_sources.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-4">
+          <label for="id_open_feedback" class="form-label"><strong>{% trans "7. Open Feedback" %}</strong> <span class="text-muted">– {% trans "What worked well for you, and what would you improve about the Community Engagement Compass?" %} <span class="text-muted">({% trans "Optional" %})</span></span></label>
+          {{ form.open_feedback }}
+          {% if form.open_feedback.errors %}
+            <div class="text-danger small">{{ form.open_feedback.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary-ka">
+            {% trans "Submit" %}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

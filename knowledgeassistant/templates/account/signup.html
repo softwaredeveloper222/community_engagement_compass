@@ -1,0 +1,116 @@
+{% extends "allauth/layouts/entrance.html" %}
+{% load i18n static %}
+
+{% block head_title %}{% trans "Sign Up" %}{% endblock %}
+
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/healthjustice.css' %}">
+  <style>
+    .ka-auth-logo {
+      height: 72px;
+      width: auto;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25));
+    }
+    .ka-auth-card .form-label {
+      font-weight: 600;
+      color: var(--secondary-color);
+    }
+
+    .ka-auth-card input[type="text"],
+    .ka-auth-card input[type="email"],
+    .ka-auth-card input[type="password"] {
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      width: 100%;
+    }
+
+    .ka-auth-card input[type="text"]:focus,
+    .ka-auth-card input[type="email"]:focus,
+    .ka-auth-card input[type="password"]:focus {
+      box-shadow: 0 0 0 .25rem rgba(97,67,133,.15);
+      border-color: var(--primary-color);
+      outline: none;
+    }
+
+    .ka-auth-card .btn-primary-ka {
+      background: var(--gradient-primary);
+      border: none;
+      border-radius: 10px;
+      padding: .75rem 1rem;
+    }
+
+    .ka-auth-card .btn-primary-ka:hover {
+      filter: brightness(0.95);
+    }
+
+    .ka-auth-card .card {
+      border-radius: 14px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="text-center mb-4">
+    <img src="{% static 'images/healthjustice-logo.webp' %}" alt="Health Justice" class="ka-auth-logo">
+    <h1 class="h3 fw-bold" style="color: var(--primary-color)">
+      {% trans "Create your account" %}
+    </h1>
+    <p class="text-muted">{% trans "Join to use the Community Engagement Compass" %}</p>
+  </div>
+
+  <div class="card shadow-sm border-0 ka-auth-card">
+    <div class="card-body p-4 p-md-5">
+      <form method="post" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <div class="mb-3">
+          <label class="form-label" for="id_name">{% trans "Name" %}</label>
+          <input type="text" name="name" id="id_name" class="form-control" required>
+          {% if form.name.errors %}
+            <div class="text-danger small">{{ form.name.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="id_email">{% trans "Email" %}</label>
+          <input type="email" name="email" id="id_email" class="form-control" required>
+          {% if form.email.errors %}
+            <div class="text-danger small">{{ form.email.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="id_password1">{% trans "Password" %}</label>
+          <input type="password" name="password1" id="id_password1" class="form-control" required>
+          {% if form.password1.errors %}
+            <div class="text-danger small">{{ form.password1.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="id_password2">{% trans "Confirm Password" %}</label>
+          <input type="password" name="password2" id="id_password2" class="form-control" required>
+          {% if form.password2.errors %}
+            <div class="text-danger small">{{ form.password2.errors|striptags }}</div>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn w-100 text-white btn-primary-ka">
+          {% trans "Create Account" %}
+        </button>
+      </form>
+
+      <p class="text-center mt-3 mb-0 text-muted">
+        {% trans "Already have an account?" %}
+        <a href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+      </p>
+    </div>
+  </div>
+{% endblock %}
