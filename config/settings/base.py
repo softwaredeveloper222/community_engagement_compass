@@ -289,8 +289,8 @@ ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 # https://docs.allauth.org/en/latest/account/configuration.html
 # Require email verification for new signups
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-# ACCOUNT_EMAIL_VERIFICATION = "none"
+# ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION = "none"
 # Confirm email as soon as the link is opened
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 # Redirects and flow control for email confirmation and logout
