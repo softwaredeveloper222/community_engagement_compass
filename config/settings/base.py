@@ -321,10 +321,12 @@ STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
 HUGGINGFACE_TOKEN = os.environ.get('HUGGINGFACE_TOKEN', '')
 LLAMA_MODEL_ID = "meta-llama/Llama-2-7b-chat-hf"
 
+# Ollama Local LLM
+OLLAMA_HOST = env('OLLAMA_HOST', default='http://localhost:11434')
+OLLAMA_MODEL = env('OLLAMA_MODEL', default='llama3.2:3b')
+
 # Groq Cloud API
-GROQ_API_KEY = env('GROQ_API_KEY', default='')
-
-
+# GROQ_API_KEY = env('GROQ_API_KEY', default='')
 
 import os
 

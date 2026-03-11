@@ -6,7 +6,7 @@ import os
 import threading
 import re
 from sentence_transformers import SentenceTransformer
-import ollama
+from groq import Groq
 from django.conf import settings
 from .models import DocumentChunk, EmbeddingIndex
 import logging
@@ -490,8 +490,8 @@ class EmbeddingService:
                                 concept.strip(),
                                 index,
                                 chunk_mapping,
-                                top_k//2,
-                                similarity_threshold * 0.8
+                                top_k//2,  # Split the results between concepts
+                                similarity_threshold * 0.8  # Lower threshold for individual concepts
                             )
                             all_chunks.extend(concept_results)
 
@@ -635,9 +635,12 @@ def post_process_response(text: str) -> str:
             if i + 1 < len(lines):
                 next_line = lines[i + 1].strip()
                 if next_line and not next_line.startswith('-') and not next_line.startswith('*'):
+                    # Check if it's end of list
                     if not re.match(r'^\*\*[^*]+\*\*$', next_line):
+                        # Next line is regular text, add spacing after list
                         pass
                     else:
+                        # Next line is heading, spacing will be added by heading logic
                         pass
 
             # Add blank line after last bullet if next is not bullet
@@ -684,38 +687,40 @@ class ChatService:
         if hasattr(self, 'initialized'):
             return
 
-        # Use Ollama local model for inference
-        self.ollama_client = ollama.Client(host=settings.OLLAMA_HOST)
-        self.model_name = settings.OLLAMA_MODEL
-        # Test Ollama connection
+        # Use Groq cloud API for inference
+        self.groq_client = Groq(api_key=settings.GROQ_API_KEY)
+        self.model_name = "llama-3.3-70b-versatile"
+        # Test Groq connection
         try:
-            response = self.ollama_client.chat(
+            response = self.groq_client.chat.completions.create(
                 model=self.model_name,
                 messages=[{"role": "user", "content": "Hi"}],
+                max_tokens=10,
             )
-            logger.info(f"Ollama connected. Using {self.model_name}")
-            self.ollama_available = True
+            logger.info(f"Groq connected. Using {self.model_name}")
+            self.groq_available = True
         except Exception as e:
-            logger.error(f"Failed to connect to Ollama: {e}")
-            self.ollama_available = False
+            logger.error(f"Failed to connect to Groq: {e}")
+            self.groq_available = False
 
         self.embedding_service = EmbeddingService()
         self.initialized = True
-        logger.info("ChatService initialized with Ollama backend")
+        logger.info("ChatService initialized with Groq backend")
 
     def load_model(self):
-        """Verify Ollama is reachable"""
-        if not self.ollama_available:
-            raise Exception("Ollama not available. Ensure Ollama is running on " + settings.OLLAMA_HOST)
+        """Verify Groq API is reachable"""
+        if not self.groq_available:
+            raise Exception("Groq API not available. Check your GROQ_API_KEY setting.")
 
         try:
-            response = self.ollama_client.chat(
+            response = self.groq_client.chat.completions.create(
                 model=self.model_name,
                 messages=[{"role": "user", "content": "Test"}],
+                max_tokens=10,
             )
-            logger.info(f"{self.model_name} model ready via Ollama")
+            logger.info(f"{self.model_name} model ready via Groq")
         except Exception as e:
-            logger.error(f"Error testing Ollama model: {str(e)}")
+            logger.error(f"Error testing Groq model: {str(e)}")
             raise
 
     def get_relevant_context(self, query: str, top_k: int = 50) -> str:
@@ -757,7 +762,7 @@ class ChatService:
     def generate_response(self, messages, similar_chunks=None):
         """Generate response with RAG (Retrieval-Augmented Generation)"""
         try:
-            if not self.ollama_available:
+            if not self.groq_available:
                 self.load_model()
 
             user_prompt = messages[-1].content
@@ -788,21 +793,19 @@ Provide a clear, well-structured HTML answer using ONLY the CONTEXT above. If th
 
 Do NOT mention "Document", "Content", or any source references. Write naturally as if stating facts."""
 
-            # Generate response using Ollama
-            response = self.ollama_client.chat(
+            # Generate response using Groq
+            response = self.groq_client.chat.completions.create(
                 model=self.model_name,
                 messages=[
                     {'role': 'system', 'content': system_prompt},
                     {'role': 'user', 'content': user_message}
                 ],
-                options={
-                    'temperature': 0.3,
-                    'top_p': 0.9,
-                    'num_predict': 512,
-                },
+                temperature=0.3,
+                top_p=0.9,
+                max_tokens=512,
             )
 
-            generated_text = response['message']['content'].strip()
+            generated_text = response.choices[0].message.content.strip()
 
             # Skip post-processing since we're now using HTML format
             # generated_text = post_process_response(generated_text)
@@ -818,13 +821,13 @@ Do NOT mention "Document", "Content", or any source references. Write naturally 
             return generated_text
 
         except Exception as e:
-            logger.error(f"Error generating response with Ollama: {str(e)}")
+            logger.error(f"Error generating response with Groq: {str(e)}")
             return "I'm sorry, there was an error processing your request."
 
     def generate_response_stream(self, messages, similar_chunks=None) -> Generator[str, None, None]:
-        """Generate streaming response with RAG using Ollama backend"""
+        """Generate streaming response with RAG using Groq backend"""
         try:
-            if not self.ollama_available:
+            if not self.groq_available:
                 self.load_model()
 
             user_prompt = messages[-1].content
@@ -1088,7 +1091,7 @@ You are a helpful assistant that answers questions about the NYC Department of H
 <p>Remember: Be helpful, concrete, and practical. Show users how to USE the framework, not just describe it abstractly. But don't invent requirements, mandates, or specific organizational policies not in the document. Always format responses in proper, well-formed HTML with absolutely NO markdown or asterisks.</p>
 </system_instructions>
 """
-            system_prompt = system_prompt + "\n\n" + FEW_SHOT_EXAMPLES
+            system_prompt=system_prompt + "\n\n" + FEW_SHOT_EXAMPLES
 
 
             user_message = f"""CONTEXT (the ONLY information you can use):
@@ -1101,28 +1104,27 @@ Provide a clear, well-structured HTML answer using ONLY the CONTEXT above. If th
 
 Do NOT mention "Document", "Content", or any source references. Write naturally as if stating facts."""
 
-            # Stream response using Ollama - yield tokens in REAL-TIME
-            response_stream = self.ollama_client.chat(
+            # Stream response using Groq - yield tokens in REAL-TIME
+            response_stream = self.groq_client.chat.completions.create(
                 model=self.model_name,
                 messages=[
                     {'role': 'system', 'content': system_prompt},
                     {'role': 'user', 'content': user_message}
                 ],
                 stream=True,
-                options={
-                    'temperature': 0.3,
-                    'top_p': 0.9,
-                    'repeat_penalty': 1.3,
-                    'num_predict': 768,
-                },
+                temperature=0.3,
+                top_p=0.9,
+                frequency_penalty=0.3,
+                presence_penalty=0.2,
+                max_tokens=768,
             )
 
             # Stream tokens in real-time
             for chunk in response_stream:
-                token = chunk['message']['content']
+                token = chunk.choices[0].delta.content
                 if token:
                     yield token
 
         except Exception as e:
-            logger.error(f"Error generating streaming response with Ollama: {str(e)}", exc_info=True)
+            logger.error(f"Error generating streaming response with Groq: {str(e)}", exc_info=True)
             yield "I'm sorry, there was an error processing your request."

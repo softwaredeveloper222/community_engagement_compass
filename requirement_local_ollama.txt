@@ -1,0 +1,54 @@
+# =============================================================================
+# Community Engagement Compass - Local Ollama Setup
+# Python 3.12 | Django 6.x | Ollama (local LLM)
+# =============================================================================
+
+# --- Core Framework ---
+Django==6.0.3
+django-environ==0.13.0
+
+# --- Database ---
+psycopg2-binary==2.9.11
+
+# --- Authentication ---
+django-allauth==65.14.3
+argon2-cffi==25.1.0
+
+# --- Templates & Forms ---
+django-crispy-forms==2.6
+crispy-bootstrap5==2026.3
+django-ckeditor==6.7.3
+django-js-asset==3.1.2
+
+# --- Static Files ---
+django_compressor==4.6.0
+rcssmin==1.2.2
+rjsmin==1.2.5
+
+# --- AI / ML (Local Ollama) ---
+ollama==0.6.1
+torch==2.10.0
+transformers==5.3.0
+sentence-transformers==5.2.3
+huggingface-hub==1.6.0
+faiss-cpu==1.13.2
+numpy==2.4.2
+pydantic==2.12.5
+
+# --- Document Processing ---
+PyPDF2==3.0.1
+Markdown==3.10.2
+pillow==12.1.1
+
+# --- Dev & Debug ---
+django-debug-toolbar==6.2.0
+django-extensions==4.1
+
+# --- Testing & Code Quality ---
+coverage==7.13.4
+django_coverage_plugin==3.2.0
+pytest==9.0.2
+mypy==1.19.1
+django-stubs==5.2.9
+django-stubs-ext==5.2.9
+types-PyYAML==6.0.12.20250915
