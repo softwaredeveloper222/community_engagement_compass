@@ -23,10 +23,11 @@
           integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer" />
-<!-- Your stuff: Third-party CSS libraries go here -->
-<!-- This file stores project-specific CSS -->
+<!-- Font Awesome for icons used in the fairytale shell -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-
+<!-- Enchanted Compass fairytale theme + project overrides -->
 {% compress css %}
   <link href="{% static 'css/project.css' %}" rel="stylesheet" />
 {% endcompress %}
@@ -61,7 +62,7 @@
 <body class="{% block bodyclass %}{% endblock bodyclass %}">
   {% block body %}
   <div class="mb-1">
-    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+    <nav class="navbar navbar-expand-md fixed-top">
       <div class="container-fluid">
         <button class="navbar-toggler navbar-toggler-right"
                 type="button"
@@ -69,43 +70,44 @@
                 data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent"
                 aria-expanded="false"
-                aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+                aria-label="Toggle navigation"
+                style="border-color: rgba(212,165,116,0.6);">
+          <span class="navbar-toggler-icon" style="filter: invert(1) opacity(0.85);"></span>
         </button>
         <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'images/healthjustice-logo.webp' %}" alt="Health Justice" height="44" class="me-2">
-            Community Engagement Compass
+            <img src="{% static 'images/healthjustice-logo.webp' %}" alt="Health Justice" height="40" class="me-2">
+            <span><i class="fas fa-compass me-2" style="color: var(--hj-accent);"></i>Community Engagement Compass</span>
         </a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
+          <ul class="navbar-nav ms-auto align-items-md-center">
             <li class="nav-item active">
-              <a class="nav-link" href="{% url 'home' %}">Home <span class="visually-hidden">(current)</span></a>
+              <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-home me-1"></i>Home <span class="visually-hidden">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'about' %}">About</a>
+              <a class="nav-link" href="{% url 'about' %}"><i class="fas fa-feather me-1"></i>About</a>
             </li>
             {% if request.user.is_authenticated %}
               <li class="nav-item d-none d-md-block">
-                <span class="navbar-text text-muted">{{ greeting_time|default:"Welcome" }}, {{ request.user.name|default:request.user.username|default:request.user.email }}!</span>
+                <span class="navbar-text">{{ greeting_time|default:"Welcome" }}, {{ request.user.name|default:request.user.username|default:request.user.email }}!</span>
               </li>
               <li class="nav-item">
                 <a class="nav-link"
-                   href="{% url 'users:detail' request.user.pk %}">{% translate "My Profile" %}</a>
+                   href="{% url 'users:detail' request.user.pk %}"><i class="fas fa-user-circle me-1"></i>{% translate "My Profile" %}</a>
               </li>
               <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
-                <a class="nav-link" href="{% url 'account_logout' %}">{% translate "Sign Out" %}</a>
+                <a class="nav-link" href="{% url 'account_logout' %}"><i class="fas fa-right-from-bracket me-1"></i>{% translate "Sign Out" %}</a>
               </li>
             {% else %}
               {% if ACCOUNT_ALLOW_REGISTRATION %}
                 <li class="nav-item">
                   {# URL provided by django-allauth/account/urls.py #}
-                  <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
+                  <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}"><i class="fas fa-wand-magic-sparkles me-1"></i>{% translate "Sign Up" %}</a>
                 </li>
               {% endif %}
               <li class="nav-item">
                 {# URL provided by django-allauth/account/urls.py #}
-                <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% translate "Sign In" %}</a>
+                <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}"><i class="fas fa-right-to-bracket me-1"></i>{% translate "Sign In" %}</a>
               </li>
             {% endif %}
           </ul>

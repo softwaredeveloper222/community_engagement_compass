@@ -1,3 +1,72 @@
 {% extends "base.html" %}
+{% load static %}
 
+{% block title %}Community Engagement Compass · A Fairytale Knowledge Companion{% endblock %}
 
+{% block content %}
+  <section class="hj-hero">
+    <div class="mb-3" style="font-size: 2rem; color: var(--hj-accent); letter-spacing: 1.5rem;">
+      <i class="fas fa-star"></i>
+      <i class="fas fa-compass" style="color: var(--hj-primary);"></i>
+      <i class="fas fa-star"></i>
+    </div>
+    <h1>Community Engagement Compass</h1>
+    <p class="mt-3" style="max-width: 720px; margin: 0 auto;">
+      Wander through your library of knowledge. Ask questions, follow the
+      threads, and let the compass guide you to the answers your community needs.
+    </p>
+
+    <div class="hj-divider mt-4" aria-hidden="true">✦ &nbsp; ✧ &nbsp; ✦</div>
+
+    <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
+      {% if request.user.is_authenticated %}
+        <a href="{% url 'chatbot:chat_home' %}" class="btn btn-primary-ka text-white">
+          <i class="fas fa-wand-magic-sparkles me-2"></i>Open the Compass
+        </a>
+        <a href="{% url 'about' %}" class="btn btn-outline-secondary">
+          <i class="fas fa-feather me-2"></i>About this realm
+        </a>
+      {% else %}
+        <a href="{% url 'account_login' %}" class="btn btn-primary-ka text-white">
+          <i class="fas fa-right-to-bracket me-2"></i>Enter the realm
+        </a>
+        <a href="{% url 'account_signup' %}" class="btn btn-outline-secondary">
+          <i class="fas fa-feather-pointed me-2"></i>Begin your story
+        </a>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="container my-5">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card p-4 h-100 text-center">
+          <div class="mb-3" style="font-size: 2.4rem; color: var(--hj-primary);">
+            <i class="fas fa-book-open"></i>
+          </div>
+          <h3 style="font-family: var(--hj-font-display);">Tomes of Knowledge</h3>
+          <p class="text-muted">Upload PDFs and watch them join the enchanted library, ready to be queried.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-4 h-100 text-center">
+          <div class="mb-3" style="font-size: 2.4rem; color: var(--hj-secondary);">
+            <i class="fas fa-comments"></i>
+          </div>
+          <h3 style="font-family: var(--hj-font-display);">Conversations by Candlelight</h3>
+          <p class="text-muted">Ask anything. The compass weaves answers from your documents, citing every source.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-4 h-100 text-center">
+          <div class="mb-3" style="font-size: 2.4rem; color: var(--hj-accent-strong);">
+            <i class="fas fa-sparkles"></i>
+            <i class="fas fa-star" style="font-size: 0.9rem; vertical-align: top;"></i>
+          </div>
+          <h3 style="font-family: var(--hj-font-display);">A Bit of Magic</h3>
+          <p class="text-muted">Streaming responses, semantic search, and a sprinkle of stardust on every page.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}

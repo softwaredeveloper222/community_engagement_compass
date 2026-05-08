@@ -1,25 +1,22 @@
-/* These styles are generated from project.scss. */
+/* Project-wide overrides — pulls in the Enchanted Compass fairytale theme. */
+@import url('healthjustice.css');
 
 .alert-debug {
-  color: black;
-  background-color: white;
-  border-color: #d6e9c6;
+  color: var(--hj-text);
+  background: #FFFCF7;
+  border-left: 4px solid var(--hj-primary-light);
 }
 
 .alert-error {
-  color: #b94a48;
-  background-color: #f2dede;
-  border-color: #eed3d7;
+  color: var(--hj-primary-dark);
+  background: linear-gradient(135deg, rgba(164,87,122,0.18), #FFFCF7);
+  border-left: 4px solid var(--hj-danger);
 }
 
-/* Health Justice Logo Styling */
-.navbar-brand {
-  display: flex;
-  align-items: center;
-}
-
+/* Brand mark in the global navbar — keep height balanced with the new shell */
+.navbar-brand { display: flex; align-items: center; }
 .navbar-brand img {
-  height: 32px;
+  height: 40px;
   width: auto;
-  margin-right: 0.5rem;
+  margin-right: 0.6rem;
 }

@@ -1,108 +1,697 @@
-:root {
-  /* Client palette */
-  --hj-primary: #2C2E65;           /* blue */
-  --hj-primary-light: #3a3d84;     /* lighter blue */
-  --hj-primary-dark: #232554;      /* darker blue */
-  --hj-accent: #555C38;            /* green */
-  --hj-accent-strong: #48502f;     /* darker green for hovers */
-  --hj-secondary: #905E7B;         /* additional accent */
-  --hj-success: #2C2E65;           /* align success tint to brand */
-  --hj-danger: #b91c1c;
-  --hj-bg-light: #D7D8E2;          /* subtle light background */
-  --hj-border: #D7D8E2;
+/* =========================================================================
+   ENCHANTED COMPASS — Fairytale Theme
+   A modern, fairytale-inspired skin for the Community Engagement Compass.
+   This file is loaded AFTER inline <style> blocks so the !important rules
+   here intentionally win the cascade and reskin the whole UI without
+   touching markup or JS.
+   ========================================================================= */
 
-  /* Useful tints of primary (computed approximations) */
-  --hj-tint-02: rgba(44, 46, 101, 0.02);
-  --hj-tint-05: rgba(44, 46, 101, 0.05);
-  --hj-tint-10: rgba(44, 46, 101, 0.10);
+/* Fonts: an elegant serif for display + a soft rounded sans for body */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap');
+
+/* -------------------------------------------------------------------------
+   1. Palette + design tokens
+   ------------------------------------------------------------------------- */
+:root {
+  /* Enchanted palette */
+  --hj-primary:        #6B4F8F;   /* twilight purple */
+  --hj-primary-light:  #8B6FB0;   /* dawn lilac     */
+  --hj-primary-dark:   #4A3568;   /* deep midnight  */
+  --hj-accent:         #D4A574;   /* champagne gold */
+  --hj-accent-strong:  #B8894C;   /* burnished gold */
+  --hj-secondary:      #C97B84;   /* fairytale rose */
+  --hj-secondary-soft: #E8A4AB;   /* blush          */
+  --hj-success:        #7AB5A1;   /* meadow mint    */
+  --hj-danger:         #A4577A;   /* plum alarm     */
+  --hj-warning:        #E8C547;   /* enchanted gold */
+  --hj-bg-light:       #FBF7F2;   /* parchment      */
+  --hj-bg-page:        #F4EFF9;   /* moonlight mist */
+  --hj-bg-deep:        #2D1B4E;   /* twilight ink   */
+  --hj-text:           #2D1B4E;
+  --hj-text-soft:      #5B4978;
+  --hj-border:         #E5DDF1;   /* mist mauve     */
+  --hj-shimmer:        #FFF8E7;
+
+  /* Useful tints */
+  --hj-tint-02: rgba(107, 79, 143, 0.04);
+  --hj-tint-05: rgba(107, 79, 143, 0.08);
+  --hj-tint-10: rgba(107, 79, 143, 0.14);
+  --hj-gold-tint-10: rgba(212, 165, 116, 0.18);
+
+  /* Typography */
+  --hj-font-display: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --hj-font-body:    'Quicksand', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--hj-primary) 0%, var(--hj-secondary) 60%, var(--hj-accent) 100%);
+  --gradient-twilight: linear-gradient(160deg, #6B4F8F 0%, #8B6FB0 50%, #C97B84 100%);
+  --gradient-dawn: linear-gradient(135deg, #F4EFF9 0%, #FDF4F5 60%, #FFF8E7 100%);
+  --gradient-fairy-button: linear-gradient(135deg, var(--hj-primary) 0%, var(--hj-secondary) 100%);
+
+  /* Shadows */
+  --shadow-soft:  0 4px 14px rgba(107, 79, 143, 0.10), 0 1px 2px rgba(45, 27, 78, 0.04);
+  --shadow-card:  0 12px 30px rgba(107, 79, 143, 0.12), 0 0 0 1px rgba(212, 165, 116, 0.18);
+  --shadow-float: 0 18px 40px rgba(107, 79, 143, 0.18), 0 6px 12px rgba(201, 123, 132, 0.10);
+  --shadow-gold:  0 0 0 1px rgba(212, 165, 116, 0.55), 0 8px 22px rgba(212, 165, 116, 0.22);
 }
 
-/* Map project-wide variables to Health Justice palette */
+/* -------------------------------------------------------------------------
+   2. Map every legacy variable to the new palette
+   ------------------------------------------------------------------------- */
 :root {
-  --primary-gradient-start: var(--hj-primary);
-  --primary-gradient-end: var(--hj-primary-light);
-  --primary-color: var(--hj-primary);
-  --primary-light: var(--hj-primary-light);
-  --primary-dark: var(--hj-primary-dark);
-  --secondary-color: var(--hj-secondary);
-  --success-color: var(--hj-success);
-  --danger-color: var(--hj-danger);
-  --warning-color: var(--hj-secondary);
-  --dark-bg: #0f172a;
-  --light-bg: var(--hj-bg-light);
-  --border-color: var(--hj-border);
-  --chat-bubble-user: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
-  --chat-bubble-assistant: #ffffff;
-  --source-bg: rgba(35, 43, 102, 0.05);
+  /* legacy chat/auth variables */
+  --primary-gradient-start: var(--hj-primary) !important;
+  --primary-gradient-end:   var(--hj-secondary) !important;
+  --primary-color:          var(--hj-primary) !important;
+  --primary-light:          var(--hj-primary-light) !important;
+  --primary-dark:           var(--hj-primary-dark) !important;
+  --secondary-color:        var(--hj-secondary) !important;
+  --success-color:          var(--hj-success) !important;
+  --danger-color:           var(--hj-danger) !important;
+  --warning-color:          var(--hj-warning) !important;
+  --dark-bg:                var(--hj-bg-deep) !important;
+  --light-bg:               var(--hj-bg-page) !important;
+  --border-color:           var(--hj-border) !important;
+  --chat-bubble-user:       var(--gradient-fairy-button) !important;
+  --chat-bubble-assistant:  #FFFCF7 !important;
+  --source-bg:              rgba(212, 165, 116, 0.10) !important;
+
+  /* dashboard variables */
+  --primary:    var(--hj-primary) !important;
+  --secondary:  var(--hj-secondary) !important;
+  --success:    var(--hj-success) !important;
+  --warning:    var(--hj-warning) !important;
+  --danger:     var(--hj-danger) !important;
+  --bg-light:   var(--hj-bg-light) !important;
+  --bg-white:   #FFFCF7 !important;
+  --bg-dark:    var(--hj-bg-deep) !important;
+  --border:     var(--hj-border) !important;
+  --gradient-primary: var(--gradient-fairy-button) !important;
 }
 
-/* Map dashboard variable set */
-:root {
-  --primary: var(--hj-primary);
-  --primary-light: var(--hj-primary-light);
-  --primary-dark: var(--hj-primary-dark);
-  --secondary: var(--hj-secondary);
-  --success: var(--hj-success);
-  --warning: var(--hj-secondary);
-  --danger: var(--hj-danger);
-  --bg-light: var(--hj-bg-light);
-  --bg-white: #ffffff;
-  --bg-dark: #0f172a;
-  --border: var(--hj-border);
-  --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-light));
+/* -------------------------------------------------------------------------
+   3. Page shell — body, fonts, fairytale background
+   ------------------------------------------------------------------------- */
+html, body {
+  font-family: var(--hj-font-body) !important;
+  color: var(--hj-text) !important;
 }
 
-/* Olive accent utility for elements that should reflect the green banner */
-.hj-olive-bg { background-color: var(--hj-accent) !important; }
-.hj-olive-text { color: var(--hj-accent) !important; }
+body,
+body.bg-light {
+  background: var(--gradient-dawn) !important;
+  background-color: transparent !important;
+  background-attachment: fixed !important;
+  position: relative;
+}
+
+/* Subtle stardust overlay — pure CSS, no images required */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(255,248,231,.55) 0, transparent 1.4px),
+    radial-gradient(circle at 78% 32%, rgba(212,165,116,.50) 0, transparent 1.6px),
+    radial-gradient(circle at 30% 70%, rgba(201,123,132,.40) 0, transparent 1.4px),
+    radial-gradient(circle at 88% 84%, rgba(255,248,231,.55) 0, transparent 1.4px),
+    radial-gradient(circle at 55% 12%, rgba(139,111,176,.35) 0, transparent 1.2px),
+    radial-gradient(circle at 8% 88%, rgba(232,197,71,.40) 0, transparent 1.4px);
+  opacity: 0.85;
+  animation: stardust 14s ease-in-out infinite alternate;
+}
+@keyframes stardust {
+  from { transform: translate3d(0,0,0); opacity: 0.6; }
+  to   { transform: translate3d(0,-6px,0); opacity: 0.95; }
+}
+
+main, .container, .chat-container { position: relative; z-index: 1; }
+
+/* Display headings get the elegant serif */
+h1, h2, h3, h4, .display-1, .display-2, .display-3, .display-4,
+.modal-title, .navbar-brand {
+  font-family: var(--hj-font-display) !important;
+  letter-spacing: 0.2px;
+}
+
+/* -------------------------------------------------------------------------
+   4. Navbar — twilight banner with golden underglow
+   ------------------------------------------------------------------------- */
+.navbar {
+  background: var(--gradient-twilight) !important;
+  border-bottom: 1px solid rgba(212,165,116,0.45) !important;
+  box-shadow: 0 6px 18px rgba(45, 27, 78, 0.20), 0 0 0 0.5px rgba(212, 165, 116, 0.6) inset !important;
+  padding: 0.75rem 1.25rem !important;
+  position: relative;
+}
+.navbar::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px; height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(212,165,116,.0) 4%,
+    rgba(212,165,116,.7) 50%,
+    rgba(212,165,116,.0) 96%,
+    transparent 100%);
+}
+
+.navbar-brand,
+.navbar .navbar-brand {
+  font-family: var(--hj-font-display) !important;
+  font-weight: 600 !important;
+  font-size: 1.55rem !important;
+  color: #FFF8E7 !important;
+  letter-spacing: 0.5px !important;
+  text-shadow: 0 1px 0 rgba(45,27,78,0.45), 0 0 16px rgba(212,165,116,0.35) !important;
+}
+.navbar-brand img,
+.navbar .navbar-brand img {
+  filter: brightness(0) invert(1) drop-shadow(0 0 6px rgba(255,248,231,0.65)) !important;
+}
+
+.navbar-light .nav-link,
+.navbar .nav-link {
+  color: #FFF8E7 !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.3px;
+  position: relative;
+}
+.navbar .nav-link:hover { color: var(--hj-accent) !important; }
+
+.navbar-text { color: rgba(255,248,231,0.85) !important; }
+
+/* Header buttons in chatbot navbar */
+.admin-btn {
+  background: rgba(255, 248, 231, 0.10) !important;
+  color: #FFF8E7 !important;
+  border: 1px solid rgba(212, 165, 116, 0.55) !important;
+  border-radius: 999px !important;
+  padding: 0.45rem 1rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.3px;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease !important;
+}
+.admin-btn:hover {
+  background: linear-gradient(135deg, rgba(212,165,116,0.35), rgba(201,123,132,0.30)) !important;
+  color: #FFF8E7 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px rgba(212,165,116,0.7), 0 6px 16px rgba(45,27,78,0.30) !important;
+}
+
+/* -------------------------------------------------------------------------
+   5. Buttons — gilded fairytale buttons
+   ------------------------------------------------------------------------- */
+.btn-primary,
+.btn-primary-ka,
+.new-chat-btn,
+.upload-btn,
+.send-button,
+.action-btn.primary {
+  background: var(--gradient-fairy-button) !important;
+  color: #FFF8E7 !important;
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 0.7rem 1.5rem !important;
+  font-family: var(--hj-font-body) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px;
+  box-shadow: var(--shadow-soft) !important;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease !important;
+}
+.btn-primary:hover,
+.btn-primary-ka:hover,
+.new-chat-btn:hover,
+.upload-btn:hover,
+.send-button:hover:not(:disabled),
+.action-btn.primary:hover {
+  background: linear-gradient(135deg, var(--hj-primary-dark) 0%, var(--hj-secondary) 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow-gold) !important;
+  color: #FFF8E7 !important;
+}
+.send-button {
+  border-radius: 999px !important;
+  padding: 0 1.5rem !important;
+  height: 60px;
+}
+
+.btn-secondary,
+.btn-outline-secondary {
+  background: transparent !important;
+  color: var(--hj-primary) !important;
+  border: 1.5px solid var(--hj-border) !important;
+  border-radius: 999px !important;
+  font-weight: 600 !important;
+  padding: 0.55rem 1.25rem !important;
+  transition: all 0.25s ease !important;
+}
+.btn-secondary:hover,
+.btn-outline-secondary:hover {
+  border-color: var(--hj-accent) !important;
+  background: var(--hj-shimmer) !important;
+  color: var(--hj-primary-dark) !important;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--hj-danger), #7B3D5C) !important;
+  border: none !important;
+  border-radius: 999px !important;
+  color: #FFF8E7 !important;
+}
+
+/* New-chat button: keep it gentle and full-width inside sidebar */
+.new-chat-btn {
+  margin: 1rem !important;
+  text-align: center;
+  text-decoration: none !important;
+}
+
+/* -------------------------------------------------------------------------
+   6. Cards, modals, panels
+   ------------------------------------------------------------------------- */
+.card,
+.admin-card,
+.ka-auth-card .card,
+.chat-main {
+  background: rgba(255, 252, 247, 0.82) !important;
+  border: 1px solid var(--hj-border) !important;
+  border-radius: 22px !important;
+  box-shadow: var(--shadow-card) !important;
+  backdrop-filter: blur(8px);
+  position: relative;
+}
+.card::before,
+.admin-card::before,
+.ka-auth-card .card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  border: 1px solid rgba(212, 165, 116, 0.35);
+  margin: 4px;
+  z-index: 0;
+}
+.card > *, .admin-card > *, .ka-auth-card .card > * { position: relative; z-index: 1; }
+
+.modal-content,
+.ka-modal .modal-content {
+  background: linear-gradient(180deg, #FFFCF7 0%, #FBF7F2 100%) !important;
+  border: 1px solid var(--hj-border) !important;
+  border-radius: 22px !important;
+  box-shadow: var(--shadow-float) !important;
+}
+.ka-modal .modal-header,
+.modal-header {
+  background: var(--gradient-twilight) !important;
+  color: #FFF8E7 !important;
+  border-bottom: 1px solid rgba(212, 165, 116, 0.4) !important;
+  border-top-left-radius: 22px !important;
+  border-top-right-radius: 22px !important;
+}
+.modal-header .btn-close { filter: invert(1) brightness(2); }
+
+/* -------------------------------------------------------------------------
+   7. Forms — soft enchanted inputs
+   ------------------------------------------------------------------------- */
+.form-control,
+.form-select,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+textarea,
+.search-input,
+.chat-input,
+.ka-auth-card input[type="text"],
+.ka-auth-card input[type="email"],
+.ka-auth-card input[type="password"] {
+  background: #FFFCF7 !important;
+  border: 1.5px solid var(--hj-border) !important;
+  border-radius: 14px !important;
+  padding: 0.75rem 1rem !important;
+  color: var(--hj-text) !important;
+  font-family: var(--hj-font-body) !important;
+  transition: all 0.25s ease !important;
+  box-shadow: inset 0 1px 2px rgba(45,27,78,0.04);
+}
+.form-control:focus,
+.form-select:focus,
+.search-input:focus,
+.chat-input:focus,
+input:focus, textarea:focus,
+.ka-auth-card input:focus {
+  outline: none !important;
+  border-color: var(--hj-accent) !important;
+  box-shadow:
+    0 0 0 3px rgba(212, 165, 116, 0.18),
+    inset 0 1px 2px rgba(45, 27, 78, 0.04) !important;
+}
+.form-label { color: var(--hj-text-soft) !important; font-weight: 600 !important; letter-spacing: 0.3px; }
+
+/* -------------------------------------------------------------------------
+   8. Chat-specific surfaces (sidebar, header, messages, sources)
+   ------------------------------------------------------------------------- */
+.chat-container { background: transparent !important; }
+
+.sidebar {
+  background: linear-gradient(180deg, rgba(255,252,247,0.92) 0%, rgba(244,239,249,0.92) 100%) !important;
+  border-right: 1px solid var(--hj-border) !important;
+  box-shadow: 4px 0 24px rgba(107, 79, 143, 0.07) !important;
+  backdrop-filter: blur(10px);
+}
+
+.chat-main {
+  background: rgba(255,252,247,0.95) !important;
+  border-radius: 22px !important;
+  margin: 1rem !important;
+  border: 1px solid var(--hj-border) !important;
+  overflow: hidden;
+}
+
+.chat-header {
+  background: linear-gradient(135deg, rgba(212,165,116,0.12) 0%, rgba(201,123,132,0.10) 50%, rgba(139,111,176,0.10) 100%) !important;
+  border-bottom: 1px solid rgba(212, 165, 116, 0.35) !important;
+  position: relative;
+}
+.chat-header h5 {
+  font-family: var(--hj-font-display) !important;
+  color: var(--hj-primary-dark) !important;
+  font-size: 1.4rem !important;
+  font-weight: 600 !important;
+}
+.chat-header::after {
+  content: "✦";
+  position: absolute;
+  right: 1.25rem; top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: var(--hj-accent);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.chat-messages {
+  background:
+    radial-gradient(ellipse at top, rgba(232,197,71,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at bottom right, rgba(201,123,132,0.07) 0%, transparent 50%),
+    var(--hj-bg-light) !important;
+}
+
+.chat-history-item {
+  border-radius: 14px !important;
+  color: var(--hj-text-soft) !important;
+  transition: all 0.25s ease !important;
+}
+.chat-history-item:hover {
+  background: linear-gradient(90deg, rgba(212,165,116,0.14), rgba(201,123,132,0.10)) !important;
+  color: var(--hj-primary-dark) !important;
+  transform: translateX(3px);
+}
+.chat-history-item.active {
+  background: linear-gradient(90deg, rgba(212,165,116,0.22), rgba(139,111,176,0.14)) !important;
+  border-left: 3px solid var(--hj-accent) !important;
+  color: var(--hj-primary-dark) !important;
+  font-weight: 600 !important;
+}
+
+/* Avatars: sparkle-emitting orbs */
+.avatar {
+  background: var(--gradient-fairy-button) !important;
+  box-shadow:
+    0 4px 12px rgba(107,79,143,0.30),
+    0 0 0 2px rgba(212,165,116,0.45),
+    inset 0 -2px 4px rgba(45,27,78,0.18) !important;
+  position: relative;
+}
+.message.assistant .avatar {
+  background: linear-gradient(135deg, var(--hj-accent), var(--hj-secondary), var(--hj-primary-light)) !important;
+}
+.avatar::after {
+  content: "✦";
+  position: absolute;
+  top: -4px; right: -4px;
+  font-size: 0.6rem;
+  color: var(--hj-warning);
+  text-shadow: 0 0 6px rgba(232,197,71,0.8);
+  animation: twinkle 3.2s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50%      { opacity: 1;   transform: scale(1.1); }
+}
+
+/* Message bubbles */
+.message-content {
+  border-radius: 22px !important;
+  font-family: var(--hj-font-body) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+.message.user .message-content {
+  background: var(--gradient-fairy-button) !important;
+  color: #FFF8E7 !important;
+  border-bottom-right-radius: 6px !important;
+  box-shadow: 0 8px 20px rgba(107,79,143,0.30) !important;
+  border: 1px solid rgba(212,165,116,0.35) !important;
+}
+.message.assistant .message-content {
+  background: #FFFCF7 !important;
+  color: var(--hj-text) !important;
+  border: 1px solid var(--hj-border) !important;
+  border-bottom-left-radius: 6px !important;
+  box-shadow: 0 6px 18px rgba(107,79,143,0.10), inset 0 0 0 1px rgba(212,165,116,0.20) !important;
+}
+.message-content strong { color: var(--hj-primary-dark) !important; }
+.message.user .message-content strong,
+.message.user .message-content * { color: #FFF8E7 !important; }
+
+/* Sources */
+.message-sources {
+  background: linear-gradient(135deg, rgba(212,165,116,0.14), rgba(255,248,231,0.55)) !important;
+  border-left: 3px solid var(--hj-accent) !important;
+  border-radius: 0 12px 12px 0 !important;
+}
+.message-sources strong { color: var(--hj-primary-dark) !important; }
+.source-title { color: var(--hj-primary) !important; font-weight: 600 !important; }
+.source-similarity {
+  background: linear-gradient(135deg, var(--hj-accent), var(--hj-warning)) !important;
+  color: #2D1B4E !important;
+  border-radius: 999px !important;
+  padding: 0.15rem 0.5rem !important;
+  font-weight: 600 !important;
+}
+
+.badge.bg-secondary {
+  background: linear-gradient(135deg, var(--hj-secondary), var(--hj-secondary-soft)) !important;
+  color: #FFF8E7 !important;
+  border-radius: 999px !important;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  padding: 0.3rem 0.65rem !important;
+}
+
+/* Chat input + send */
+.chat-input-container {
+  background: linear-gradient(180deg, rgba(255,252,247,0.6), #FFFCF7) !important;
+  border-top: 1px solid var(--hj-border) !important;
+}
+.chat-input {
+  border-radius: 18px !important;
+  background: #FFFCF7 !important;
+}
+.chat-input:focus {
+  border-color: var(--hj-accent) !important;
+  box-shadow:
+    0 0 0 3px rgba(212,165,116,0.20),
+    0 6px 16px rgba(107,79,143,0.10) !important;
+}
+
+/* Toggle (streaming switch) */
+.toggle-slider { background-color: rgba(107,79,143,0.25) !important; }
+input:checked + .toggle-slider {
+  background: var(--gradient-fairy-button) !important;
+}
+
+/* Typing dots */
+.typing-indicator {
+  background: #FFFCF7 !important;
+  border: 1px solid var(--hj-border) !important;
+  border-radius: 22px !important;
+}
+.typing-dot { background: var(--hj-secondary) !important; }
+.streaming-cursor { background: var(--hj-accent) !important; }
+
+/* Example bubble */
+.message.example .message-content {
+  background: linear-gradient(135deg, #FFF8E7, #FBF7F2) !important;
+  border: 1px dashed var(--hj-accent) !important;
+  color: var(--hj-text-soft) !important;
+}
+.example-badge {
+  background: linear-gradient(135deg, var(--hj-accent), var(--hj-warning)) !important;
+  color: #2D1B4E !important;
+  border-radius: 999px !important;
+}
+
+/* -------------------------------------------------------------------------
+   9. Dashboards (admin & user)
+   ------------------------------------------------------------------------- */
+.dashboard-nav,
+.section-header,
+.stat-icon,
+.stat-card::before {
+  background: var(--gradient-twilight) !important;
+}
+.stat-card,
+.admin-card {
+  background: rgba(255,252,247,0.92) !important;
+  border: 1px solid var(--hj-border) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--shadow-card) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+.stat-card:hover,
+.admin-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: var(--shadow-float) !important;
+}
+
+.action-btn {
+  border-radius: 999px !important;
+  border: 1px solid var(--hj-border) !important;
+  background: #FFFCF7 !important;
+  color: var(--hj-primary) !important;
+  font-weight: 600 !important;
+  transition: all 0.25s ease !important;
+}
+.action-btn:hover {
+  background: var(--gradient-fairy-button) !important;
+  color: #FFF8E7 !important;
+  border-color: transparent !important;
+}
+.action-btn.danger:hover {
+  background: linear-gradient(135deg, var(--hj-danger), #7B3D5C) !important;
+}
+
+.data-table th {
+  background: linear-gradient(135deg, rgba(107,79,143,0.10), rgba(212,165,116,0.10)) !important;
+  color: var(--hj-primary-dark) !important;
+  font-family: var(--hj-font-display) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.4px;
+}
+.data-table tr:hover { background: rgba(212,165,116,0.10) !important; }
+
+/* -------------------------------------------------------------------------
+   10. Auth pages (login, signup, password reset)
+   ------------------------------------------------------------------------- */
+.ka-auth-logo {
+  filter:
+    drop-shadow(0 2px 6px rgba(107,79,143,0.25))
+    drop-shadow(0 0 18px rgba(212,165,116,0.35)) !important;
+}
+.ka-auth-card .form-label { color: var(--hj-text-soft) !important; }
+
+/* -------------------------------------------------------------------------
+   11. Alerts, toasts
+   ------------------------------------------------------------------------- */
+.alert {
+  border-radius: 16px !important;
+  border: 1px solid var(--hj-border) !important;
+  background: #FFFCF7 !important;
+  box-shadow: var(--shadow-soft) !important;
+  font-family: var(--hj-font-body) !important;
+}
+.alert-success {
+  background: linear-gradient(135deg, rgba(122,181,161,0.18), #FFFCF7) !important;
+  border-left: 4px solid var(--hj-success) !important;
+}
+.alert-warning {
+  background: linear-gradient(135deg, rgba(232,197,71,0.20), #FFFCF7) !important;
+  border-left: 4px solid var(--hj-warning) !important;
+}
+.alert-danger,
+.alert-error {
+  background: linear-gradient(135deg, rgba(164,87,122,0.18), #FFFCF7) !important;
+  border-left: 4px solid var(--hj-danger) !important;
+  color: var(--hj-primary-dark) !important;
+}
+.alert-info {
+  background: linear-gradient(135deg, rgba(139,111,176,0.18), #FFFCF7) !important;
+  border-left: 4px solid var(--hj-primary-light) !important;
+}
+
+.toast {
+  border-radius: 14px !important;
+  border: 1px solid rgba(212,165,116,0.45) !important;
+  box-shadow: var(--shadow-float) !important;
+}
+
+/* -------------------------------------------------------------------------
+   12. Scrollbar — golden mist
+   ------------------------------------------------------------------------- */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track {
+  background: rgba(229, 221, 241, 0.4) !important;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--hj-secondary), var(--hj-primary-light)) !important;
+  border-radius: 999px !important;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--hj-accent), var(--hj-primary)) !important;
+  background-clip: padding-box;
+}
+
+/* -------------------------------------------------------------------------
+   13. Links
+   ------------------------------------------------------------------------- */
+a {
+  color: var(--hj-primary) !important;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover { color: var(--hj-accent-strong) !important; }
+.message-content a, .message-content a:hover { color: inherit !important; }
+
+/* -------------------------------------------------------------------------
+   14. Hero / page heading helpers
+   ------------------------------------------------------------------------- */
+.hj-hero {
+  text-align: center;
+  padding: 4rem 1rem 2rem;
+}
+.hj-hero h1 {
+  font-family: var(--hj-font-display) !important;
+  font-size: clamp(2.5rem, 5vw, 4rem) !important;
+  font-weight: 600 !important;
+  background: linear-gradient(135deg, var(--hj-primary-dark), var(--hj-secondary), var(--hj-accent-strong));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  letter-spacing: 0.5px;
+}
+.hj-hero p { color: var(--hj-text-soft) !important; font-size: 1.15rem; }
+
+.hj-divider {
+  text-align: center;
+  margin: 2rem 0;
+  color: var(--hj-accent);
+  letter-spacing: 1.2rem;
+}
+
+/* -------------------------------------------------------------------------
+   15. Misc helpers retained from old palette
+   ------------------------------------------------------------------------- */
+.hj-olive-bg     { background-color: var(--hj-accent) !important; color: #2D1B4E !important; }
+.hj-olive-text   { color: var(--hj-accent) !important; }
 .hj-olive-border { border-color: var(--hj-accent) !important; }
-
-/* Chat overrides to blend navy + olive */
-.navbar { background: linear-gradient(135deg, var(--hj-primary), var(--hj-primary-light)) !important; }
-.new-chat-btn { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
-.new-chat-btn:hover { background: linear-gradient(135deg, var(--hj-accent-strong), var(--hj-primary)) !important; }
-.chat-header { background: linear-gradient(135deg, rgba(44,46,101,0.06), rgba(85,92,56,0.10)) !important; }
-.chat-history-item:hover { background: rgba(85, 92, 56, 0.10) !important; }
-.chat-history-item.active { background: rgba(44, 46, 101, 0.10) !important; border-left-color: var(--hj-accent) !important; }
-.message-sources { border-left-color: var(--hj-accent) !important; background: rgba(44,46,101,0.06) !important; }
-.source-title { color: var(--hj-primary) !important; }
-.source-similarity { background: rgba(44, 46, 101, 0.10) !important; color: var(--hj-success) !important; }
-.send-button { background: var(--hj-primary) !important; }
-.send-button:hover:not(:disabled) { background: var(--hj-accent-strong) !important; }
-.typing-indicator { border-color: var(--hj-border) !important; }
-.streaming-cursor { background-color: var(--hj-accent) !important; }
-
-/* Dashboard accents */
-.dashboard-nav { background: var(--gradient-primary) !important; }
-.stat-card::before { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
-.stat-icon { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
-.section-header { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
-.upload-btn { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
-.action-btn:hover { background: var(--hj-primary) !important; border-color: var(--hj-primary) !important; }
-.action-btn.danger:hover { background: var(--hj-danger) !important; border-color: var(--hj-danger) !important; }
-
-/* Bubbles and avatars use both tones for a cohesive look */
-.avatar { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
-.message.assistant .avatar { background: linear-gradient(135deg, var(--hj-accent), var(--hj-primary)) !important; }
-.message.user .message-content { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; color: #ffffff !important; }
-.message.assistant .message-content { border-color: rgba(113,122,75,0.35) !important; }
-
-/* Inputs and focus states fuse navy + olive */
-.search-input:focus { border-color: var(--hj-accent) !important; box-shadow: 0 2px 6px rgba(113,122,75,0.18) !important; }
-.chat-input { border-color: var(--hj-border) !important; }
-.chat-input:focus { border-color: var(--hj-primary) !important; box-shadow: 0 4px 10px rgba(35,43,102,0.12), 0 0 0 3px rgba(113,122,75,0.10) !important; }
-.toggle-slider { background-color: rgba(35,43,102,0.25) !important; }
-input:checked + .toggle-slider { background-image: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
-
-/* Scrollbar uses both tones */
-::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--hj-primary), var(--hj-accent)) !important; }
-::-webkit-scrollbar-thumb:hover { background: var(--hj-accent-strong) !important; }
-
-/* Badges in source list and elsewhere */
-.badge.bg-secondary { background-color: var(--hj-accent) !important; color: #fff !important; }
-
-/* Tables and headers lightly tinted */
-.data-table th { background: rgba(35,43,102,0.05) !important; }
-.data-table tr:hover { background: rgba(113,122,75,0.06) !important; }
-
-
